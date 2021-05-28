@@ -11,6 +11,9 @@ namespace backend.Controllers
     [Route("[controller]")]
     public class ToDoController : ControllerBase
     {
+
+        static readonly ITodoRepository repository = new TodoRepository();
+
         private readonly ILogger<ToDoController> _logger;
 
         public ToDoController(ILogger<ToDoController> logger)
@@ -19,9 +22,21 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public string Get()
+        [Route("api/tasks")]
+        public IEnumerable<Models.Errand> GetAllTasks()
         {
-            return "Hello World";
+            return repository.GetAll();
         }
+
+        
+        [HttpPost]
+        [Route("api/errand")]
+        [Consumes("application/json")]
+        public Models.Errand PostUser(Models.Errand item)
+        {
+            return repository.Add(item);
+        }
+
+
     }
 }
